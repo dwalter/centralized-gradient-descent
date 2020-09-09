@@ -10,6 +10,7 @@ from torch.optim.lr_scheduler import StepLR
 
 from models import Net
 from train import train
+from eval import test
 
 
 def main():
