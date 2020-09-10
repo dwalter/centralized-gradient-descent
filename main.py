@@ -19,21 +19,21 @@ def main():
     parser.add_argument(
         "--batch-size",
         type=int,
-        default=64,
+        default=1,
         metavar="N",
-        help="input batch size for training (default: 64)",
+        help="input batch size for training (default: 1)",
     )
     parser.add_argument(
         "--test-batch-size",
         type=int,
-        default=1000,
+        default=1,
         metavar="N",
-        help="input batch size for testing (default: 1000)",
+        help="input batch size for testing (default: 1)",
     )
     parser.add_argument(
         "--epochs",
         type=int,
-        default=14,
+        default=3,
         metavar="N",
         help="number of epochs to train (default: 14)",
     )
@@ -66,7 +66,7 @@ def main():
     parser.add_argument(
         "--log-interval",
         type=int,
-        default=10,
+        default=100,
         metavar="N",
         help="how many batches to wait before logging training status",
     )
@@ -96,13 +96,10 @@ def main():
     test_loader = torch.utils.data.DataLoader(dataset2, **kwargs)
 
     model = Net().to(device)
-    optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
 
-    scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
     for epoch in range(1, args.epochs + 1):
-        train(args, model, device, train_loader, optimizer, epoch)
+        train(args, model, device, train_loader, epoch)
         test(model, device, test_loader)
-        scheduler.step()
 
     if args.save_model:
         torch.save(model.state_dict(), "mnist_cnn.pt")
